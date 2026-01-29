@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contador de Parágrafos por Classe</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .resultado {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .resultado h2 {
+            color: #0066cc;
+            margin-top: 0;
+        }
+        .conteudo {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .conteudo h2 {
+            color: #0066cc;
+            margin-top: 0;
+        }
+        .destaque {
+            color: #cc0000;
+        }
+        .informacao {
+            color: #006600;
+        }
+        .observacao {
+            color: #ff6600;
+        }
+        .contagem {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-left: 4px solid #0066cc;
+        }
+    </style>
+</head>
+<body>
+    <h1>Contador de Parágrafos por Classe</h1>
+    
+    <div class="resultado" id="resultado">
+        <h2>Resultado da Contagem</h2>
+        <!-- Os resultados serão exibidos aqui -->
+    </div>
+    
+    <div class="conteudo">
+        <h2>Conteúdo com Parágrafos</h2>
+        
+        <p class="destaque">Este é um parágrafo de destaque. Ele possui a classe "destaque".</p>
+        <p class="destaque">Este é outro parágrafo de destaque. Também possui a classe "destaque".</p>
+        <p class="destaque">Este é o terceiro parágrafo de destaque.</p>
+        
+        <p class="informacao">Este é um parágrafo informativo. Ele possui a classe "informacao".</p>
+        <p class="informacao">Este é outro parágrafo informativo.</p>
+        
+        <p class="observacao">Este é um parágrafo de observação. Ele possui a classe "observacao".</p>
+        <p class="observacao">Este é outro parágrafo de observação.</p>
+        <p class="observacao">Este é o terceiro parágrafo de observação.</p>
+        <p class="observacao">Este é o quarto parágrafo de observação.</p>
+        
+        <p>Este é um parágrafo sem classe específica.</p>
+        <p>Este é outro parágrafo sem classe específica.</p>
+    </div>
+
+    <script>
+        // Função para contar parágrafos por classe
+        function contarParagrafosPorClasse() {
+            // Obter todos os parágrafos do documento
+            const todosParagrafos = document.querySelectorAll('p');
+            
+            // Objeto para armazenar a contagem por classe
+            const contagemPorClasse = {};
+            
+            // Iterar por todos os parágrafos
+            todosParagrafos.forEach(paragrafo => {
+                // Obter as classes do parágrafo
+                const classes = paragrafo.className;
+                
+                // Se o parágrafo tem uma ou mais classes
+                if (classes) {
+                    // Separar as classes (caso tenha múltiplas classes)
+                    const listaClasses = classes.split(' ');
+                    
+                    listaClasses.forEach(classe => {
+                        // Incrementar a contagem para cada classe
+                        if (contagemPorClasse[classe]) {
+                            contagemPorClasse[classe]++;
+                        } else {
+                            contagemPorClasse[classe] = 1;
+                        }
+                    });
+                } else {
+                    // Contar parágrafos sem classe
+                    if (contagemPorClasse['sem-classe']) {
+                        contagemPorClasse['sem-classe']++;
+                    } else {
+                        contagemPorClasse['sem-classe'] = 1;
+                    }
+                }
+            });
+            
+            return contagemPorClasse;
+        }
+        
+        // Função para exibir os resultados
+        function exibirResultados() {
+            const contagem = contarParagrafosPorClasse();
+            const resultadoDiv = document.getElementById('resultado');
+            
+            // Limpar conteúdo anterior
+            resultadoDiv.innerHTML = '<h2>Resultado da Contagem</h2>';
+            
+            // Adicionar informações para cada classe
+            for (const [classe, quantidade] of Object.entries(contagem)) {
+                const div = document.createElement('div');
+                div.className = 'contagem';
+                div.textContent = `Classe "${classe}": ${quantidade} parágrafo(s)`;
+                resultadoDiv.appendChild(div);
+            }
+            
+            // Adicionar total
+            const total = Object.values(contagem).reduce((acc, val) => acc + val, 0);
+            const divTotal = document.createElement('div');
+            divTotal.className = 'contagem';
+            divTotal.style.borderColor = '#cc0000';
+            divTotal.textContent = `Total de parágrafos: ${total}`;
+            resultadoDiv.appendChild(divTotal);
+        }
+        
+        // Executar a contagem quando a página carregar
+        window.addEventListener('DOMContentLoaded', exibirResultados);
+    </script>
+</body>
+</html>
