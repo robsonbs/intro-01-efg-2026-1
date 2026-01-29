@@ -100,23 +100,15 @@
                 // Se o parágrafo tem uma ou mais classes
                 if (classes) {
                     // Separar as classes (caso tenha múltiplas classes)
-                    const listaClasses = classes.split(' ');
+                    const listaClasses = classes.trim().split(' ').filter(c => c);
                     
                     listaClasses.forEach(classe => {
                         // Incrementar a contagem para cada classe
-                        if (contagemPorClasse[classe]) {
-                            contagemPorClasse[classe]++;
-                        } else {
-                            contagemPorClasse[classe] = 1;
-                        }
+                        contagemPorClasse[classe] = (contagemPorClasse[classe] || 0) + 1;
                     });
                 } else {
                     // Contar parágrafos sem classe
-                    if (contagemPorClasse['sem-classe']) {
-                        contagemPorClasse['sem-classe']++;
-                    } else {
-                        contagemPorClasse['sem-classe'] = 1;
-                    }
+                    contagemPorClasse['sem-classe'] = (contagemPorClasse['sem-classe'] || 0) + 1;
                 }
             });
             
@@ -125,6 +117,7 @@
         
         // Função para exibir os resultados
         function exibirResultados() {
+            const todosParagrafos = document.querySelectorAll('p');
             const contagem = contarParagrafosPorClasse();
             const resultadoDiv = document.getElementById('resultado');
             
@@ -139,12 +132,11 @@
                 resultadoDiv.appendChild(div);
             }
             
-            // Adicionar total
-            const total = Object.values(contagem).reduce((acc, val) => acc + val, 0);
+            // Adicionar total (usar o número real de parágrafos)
             const divTotal = document.createElement('div');
             divTotal.className = 'contagem';
             divTotal.style.borderColor = '#cc0000';
-            divTotal.textContent = `Total de parágrafos: ${total}`;
+            divTotal.textContent = `Total de parágrafos: ${todosParagrafos.length}`;
             resultadoDiv.appendChild(divTotal);
         }
         
